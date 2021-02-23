@@ -1,0 +1,20 @@
+<p-dataView [value]="employees" layout="grid">
+  <p-header>
+    <div class="ui-helper-clearfix">
+      
+      <div class="ui-g-2 ui-md-1 ui-md-offset-11">
+        <p-button label="Add" (click)="openAddDialog()"></p-button>
+      </div>
+    </div>
+  </p-header>
+  <ng-template let-employee pTemplate="gridItem">
+    <div style="padding:.5em" class="ui-g-12 ui-md-3">
+      <p-panel [header]="employee.employeeDetails.firstName + ' ' + employee.employeeDetails.lastName" [style]="{'text-align':'center'}">
+          <img src="assets/cc-silhouette-545x545.png" width="60">
+          <hr class="ui-widget-content" style="border-top:0">
+      </p-panel>
+    </div>
+  </ng-template>
+</p-dataView>
+
+<app-manage-employee [display]="display" (displayChange)="onDialogClose($event)"></app-manage-employee>

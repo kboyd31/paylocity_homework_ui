@@ -1,0 +1,82 @@
+
+<p-dialog #dialog header="{{dialogHeader}}" modal="modal" [(visible)]="display" [responsive]="true" (onAfterHide)="onHide()">
+  <div class="card">
+    <h2>Employee</h2>
+    <div class="p-fluid p-formgrid p-grid">
+      <div class="p-field p-col-6">
+        <label for="firstName">First Name</label>
+        <input id="firstName" name="firstName" type="text" pInputText [(ngModel)]="employee.firstName" />
+      </div>
+      <div class="p-field p-col-6">
+        <label for="lastName">Last Name</label>
+        <input id="lastName" name="lastName" type="text" pInputText [(ngModel)]="employee.lastName" />
+      </div>
+      <div class="p-field p-col-6">
+        <label for="salary">Salary</label>
+        <input id="salary" name="salary" type="number" pInputText [(ngModel)]="employee.salary" />
+      </div>
+      <div class="p-field p-col-6">
+        <label for="benefitPackages">Benefit Package</label>
+        <p-dropdown inputId="benefitPackages" [options]="benefitPackages" [(ngModel)]="employee.benefitPackage" optionLabel="benefitPackageName" placeholder="Select"></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2>Dependents</h2>
+    <!-- 
+      Page does not scroll to the bottom when "Add" is clicked, need to move the scroll when updated. 
+      Would prefer to remove the "Add" button from the table and put it at the bottom of the page so 
+      that I don't have to ignore the first entry until the Add button is pressed. This isn't the best UX          
+    -->
+    <p-table [value]="employee.dependents">
+      <ng-template pTemplate="header">
+        <tr class="p-text-left">
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Relationship</th>
+            <th></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-dependent let-rowIndex="rowIndex">
+        <tr>
+            <td><input id="firstName{{rowIndex}}" name="firstName{{rowIndex}}"  type="text" pInputText [(ngModel)]="dependent.firstName"/></td>
+            <td><input id="lastName{{rowIndex}}" name="lastName{{rowIndex}}" type="text" pInputText [(ngModel)]="dependent.lastName"/></td>
+            <td><p-dropdown [options]="relationshipTypes" [(ngModel)]="dependent.relationship" optionLabel="displayName" optionValue="typeName"></p-dropdown></td>
+            <td style="text-align: center;" *ngIf="rowIndex === employee.dependents.length - 1"><button type="button" pButton label="Add" (click)="addDependent()"></button></td>
+            <!-- <td style="text-align: center;" *ngIf="rowIndex !== employee.dependents.length - 1"><button class="ui-button-danger" type="button" pButton label="Remove" (click)="removeDependent()"></button></td> -->
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <div class="card">
+    <h2>Benefits</h2>
+    <div class="p-d-fluid">
+      <div id="totalRow">
+        <div>
+          <label for="total">Salary</label>
+          <span id="total" name="total">{{employee.salary | currency}}</span>
+        </div>
+        <div>
+          <label for="total">Pay Frequency</label>
+          <span id="total" name="total">{{employee.payFrequency}}</span>
+        </div>
+        <div>
+          <label for="total">Employee Cost</label>
+          <span id="total" name="total">{{getEmployeeCost() | currency}}</span>
+        </div>
+        <div>
+          <label for="employee-cost">Dependent Cost</label> 
+          <span id="employee-cost" name="total">{{getDependentCost() | currency}}</span>
+        </div>
+        <div>
+          <label for="total">Total</label> 
+          <span id="total" name="total">{{getTotal() | currency}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <p-footer>
+    <button type="submit" name="submit-employee" id="submit-employee" pButton label="Save"></button>
+  </p-footer>
+</p-dialog>
